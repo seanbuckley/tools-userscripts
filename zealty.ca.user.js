@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Zealty.ca remove scroll bar
-// @version      0.2
+// @version      0.2.1
 // @namespace    https://github.com/seanbuckley/userscripts
 // @license      MIT
 // @description  Remove redundant scroll bar from Zealty.ca pages
@@ -22,8 +22,8 @@
 
   waitForKeyElements('#container', removeClass);
 
-  const removeClass = (jNode) => {
+  function removeClass(jNode) {
     console.log('Cleaned node: ', jNode);
     jNode.removeClass('scroll');
-  };
+  }
 })();
