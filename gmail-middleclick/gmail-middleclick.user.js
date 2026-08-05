@@ -52,11 +52,15 @@
 
     // Suppress autoscroll before auxclick fires
     document.addEventListener('mousedown', (e) => {
-        if (e.button === 1 && getRow(e.target)) e.preventDefault();
+        if (e.button !== 1) return;
+        if (e.target.closest && e.target.closest('a[href]')) return;
+        if (getRow(e.target)) e.preventDefault();
     }, true);
 
     document.addEventListener('auxclick', (e) => {
         if (e.button !== 1) return;
+        // Let native middle-click handle genuine links inside a row.
+        if (e.target.closest && e.target.closest('a[href]')) return;
         const row = getRow(e.target);
         if (!row) return;
         const url = threadUrl(row);
