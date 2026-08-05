@@ -61,6 +61,9 @@ Dashboard ➔ the script ➔ **Edit**) and add your token to both lines:
 // @downloadURL  https://YOUR_TOKEN@github.com/seanbuckley/userscripts/raw/refs/heads/master/gmail-middleclick/gmail-middleclick.user.js
 ```
 
+The Personal Access Token can be regenerated (as per above) in the [GitHub settings](https://github.com/settings/tokens). 
+The existing PAT is also saved in a Bitwarden vault and can be reused.
+
 Change these only in your local copy. A token committed to the repository is a
 published credential, so the versions tracked here stay tokenless.
 
