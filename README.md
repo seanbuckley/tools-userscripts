@@ -8,6 +8,10 @@ Custom user scripts for web annoyances.
 | --- | --- | --- |
 | Gmail Middle Click → Background Tab | Middle-click a thread in the list to open it in a background tab, instead of triggering autoscroll. | [Install](https://raw.githubusercontent.com/seanbuckley/userscripts/master/gmail-middleclick/gmail-middleclick.user.js) |
 
+While this repository is private the **Install** links above return 404 for
+anyone not signed in — see [Private Repository](#private-repository-installing-via-personal-access-token)
+below.
+
 ## Installation
 
 ### Public Repository
@@ -26,11 +30,39 @@ If loading from a private GitHub repository:
    - Create a token with **Contents: Read-only** permission for this repository.
 2. Open **Violentmonkey Dashboard** in your browser.
 3. Click the **`+`** button in the top right and choose **Install from URL**.
-4. Enter the Raw file URL with your token appended:
+4. Enter the file URL with your token in front of the host:
    ```text
-   https://raw.githubusercontent.com/seanbuckley/userscripts/master/gmail-middleclick/gmail-middleclick.user.js?token=YOUR_PERSONAL_ACCESS_TOKEN
+   https://YOUR_TOKEN@github.com/seanbuckley/userscripts/raw/refs/heads/master/gmail-middleclick/gmail-middleclick.user.js
    ```
 5. Click **Confirm Installation**.
+
+The token goes before an `@` in the host position, not in a query string. A
+`?token=...` parameter on a `raw.githubusercontent.com` URL is something GitHub
+generates itself when you click **Raw**; it expires after about a week and will
+not accept a PAT in its place.
+
+> **Keep the token out of places it will spread.** Your userscript manager stores
+> the install URL verbatim, so the token sits in plaintext in the extension's
+> config and travels with any settings export or browser-sync backup. Scope it to
+> `Contents: Read-only` on this repository alone, give it a short expiry, and
+> revoke it if it is ever pasted somewhere it does not belong.
+
+#### Auto-updating from a private repository
+
+`@updateURL` and `@downloadURL` in each script point at the unauthenticated
+public URL, which returns 404 while the repository is private — so update checks
+fail, and most managers report nothing when they do.
+
+To make updates work, edit your **installed** copy of the script (Violentmonkey
+Dashboard ➔ the script ➔ **Edit**) and add your token to both lines:
+
+```text
+// @updateURL    https://YOUR_TOKEN@github.com/seanbuckley/userscripts/raw/refs/heads/master/gmail-middleclick/gmail-middleclick.user.js
+// @downloadURL  https://YOUR_TOKEN@github.com/seanbuckley/userscripts/raw/refs/heads/master/gmail-middleclick/gmail-middleclick.user.js
+```
+
+Change these only in your local copy. A token committed to the repository is a
+published credential, so the versions tracked here stay tokenless.
 
 Tested with Violentmonkey and Tampermonkey. Other managers should work, but
 background-tab placement may differ — the tab-position hints used by the Gmail
