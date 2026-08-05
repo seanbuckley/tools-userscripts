@@ -1,0 +1,27 @@
+name: CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Validate Userscripts Syntax
+        run: |
+          echo "Checking JavaScript syntax for all .user.js files..."
+          for file in $(find . -name "*.user.js"); do
+            echo "Checking $file"
+            node --check "$file"
+          done
