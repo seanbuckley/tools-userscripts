@@ -18,6 +18,14 @@
 (function () {
     'use strict';
 
+    // GM_openInTab is Violentmonkey/Tampermonkey. `insert` and `setParent` are
+    // manager-specific placement hints and are ignored elsewhere. Fall back to
+    // window.open so the click still does something under other managers.
+    const openInTab =
+        typeof GM_openInTab === 'function'
+            ? (url) => GM_openInTab(url, { active: false, insert: true, setParent: true })
+            : (url) => window.open(url, '_blank');
+
     const getRow = (t) =>
         t.closest && t.closest('tr.zA, [data-legacy-thread-id], [data-thread-id]');
 
@@ -52,17 +60,21 @@
 
     // Suppress autoscroll before auxclick fires
     document.addEventListener('mousedown', (e) => {
-        if (e.button === 1 && getRow(e.target)) e.preventDefault();
+        if (e.button !== 1) return;
+        if (e.target.closest && e.target.closest('a[href]')) return;
+        if (getRow(e.target)) e.preventDefault();
     }, true);
 
     document.addEventListener('auxclick', (e) => {
         if (e.button !== 1) return;
+        // Let native middle-click handle genuine links inside a row.
+        if (e.target.closest && e.target.closest('a[href]')) return;
         const row = getRow(e.target);
         if (!row) return;
         const url = threadUrl(row);
         if (!url) return;
         e.preventDefault();
         e.stopPropagation();
-        GM_openInTab(url, { active: false, insert: true, setParent: true });
+        openInTab(url);
     }, true);
 })();
