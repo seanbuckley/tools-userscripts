@@ -11,17 +11,24 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Set up Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
-          node-version: '20'
+          node-version: '24'
 
       - name: Validate Userscripts Syntax
         run: |
           echo "Checking JavaScript syntax for all .user.js files..."
-          for file in $(find . -name "*.user.js"); do
+          count=0
+          while IFS= read -r -d '' file; do
             echo "Checking $file"
             node --check "$file"
-          done
+            count=$((count + 1))
+          done < <(find . -name '*.user.js' -print0)
+          if [ "$count" -eq 0 ]; then
+            echo "No .user.js files found — expected at least one." >&2
+            exit 1
+          fi
+          echo "Checked $count file(s)."

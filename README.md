@@ -42,6 +42,13 @@ One directory per script, named after the script. Each script file is named
 `<name>.user.js` — the `.user.js` suffix is what lets a userscript manager
 intercept the Raw URL and install it.
 
+[`template/template.user.js`](template/template.user.js) is a starting point for
+new scripts: copy it into a new directory, rename it, and fill in the metadata
+block (including `@updateURL` and `@downloadURL`, which point at the script's own
+Raw URL once its path is known).
+
+CI runs `node --check` against every `*.user.js` file on push and pull request.
+
 ## Licence
 
 [MIT](LICENSE)

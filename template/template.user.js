@@ -13,7 +13,7 @@
 // @supportURL   https://github.com/seanbuckley/userscripts/issues
 // ==/UserScript==
 (function () {
-    'use strict';
+  'use strict';
 
-    // Script logic here...
+  // Script logic here...
 })();
