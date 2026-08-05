@@ -18,10 +18,23 @@
 (function () {
     'use strict';
 
-    const acct = (location.pathname.match(/\/mail\/u\/(\d+)/) || [, '0'])[1];
-
     const getRow = (t) =>
         t.closest && t.closest('tr.zA, [data-legacy-thread-id], [data-thread-id]');
+
+    // Gmail hashes look like "#inbox", "#inbox/<id>", "#search/<query>/<id>",
+    // "#label/Some-Label/<id>". Reuse everything except a trailing message id so
+    // the opened tab lands in the same view the click came from.
+    function currentView() {
+        const hash = location.hash.replace(/^#/, '');
+        if (!hash) return 'inbox';
+        const parts = hash.split('/');
+        // A trailing segment that is a bare hex message id is dropped.
+        if (parts.length > 1 && /^[0-9a-f]{6,}$/i.test(parts[parts.length - 1])) {
+            parts.pop();
+        }
+        const view = parts.join('/');
+        return view || 'all';
+    }
 
     function threadUrl(row) {
         const el = row.matches('[data-legacy-thread-id], [data-thread-id]')
@@ -32,8 +45,8 @@
                     el.getAttribute('data-thread-id');
         if (!raw) return null;
         const id = raw.replace(/^thread-[fa]:/, '');
-        const view = (location.hash.match(/^#([^/?]+)/) || [, 'inbox'])[1];
-        return `https://mail.google.com/mail/u/${acct}/#${view}/${id}`;
+        const acct = (location.pathname.match(/\/mail\/u\/(\d+)/) || [, '0'])[1];
+        return `https://mail.google.com/mail/u/${acct}/#${currentView()}/${id}`;
     }
 
     // Suppress autoscroll before auxclick fires
