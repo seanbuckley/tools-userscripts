@@ -1,3 +1,10 @@
 {
-  "cSpell.words": ["Userscript", "Zealty"]
+  "cSpell.words": [
+    "auxclick",
+    "Greasemonkey",
+    "noframes",
+    "Tampermonkey",
+    "Userscript",
+    "Violentmonkey"
+  ]
 }
