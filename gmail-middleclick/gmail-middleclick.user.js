@@ -28,8 +28,9 @@
         const hash = location.hash.replace(/^#/, '');
         if (!hash) return 'inbox';
         const parts = hash.split('/');
-        // A trailing segment that is a bare hex message id is dropped.
-        if (parts.length > 1 && /^[0-9a-f]{6,}$/i.test(parts[parts.length - 1])) {
+        // A trailing segment that is a bare hex message id (legacy) or an
+        // "FMfc..." permalink id (current Gmail) is dropped.
+        if (parts.length > 1 && /^([0-9a-f]{6,}|FMfc[a-zA-Z0-9]+)$/i.test(parts[parts.length - 1])) {
             parts.pop();
         }
         const view = parts.join('/');
