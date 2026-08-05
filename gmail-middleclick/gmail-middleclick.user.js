@@ -18,6 +18,14 @@
 (function () {
     'use strict';
 
+    // GM_openInTab is Violentmonkey/Tampermonkey. `insert` and `setParent` are
+    // manager-specific placement hints and are ignored elsewhere. Fall back to
+    // window.open so the click still does something under other managers.
+    const openInTab =
+        typeof GM_openInTab === 'function'
+            ? (url) => GM_openInTab(url, { active: false, insert: true, setParent: true })
+            : (url) => window.open(url, '_blank');
+
     const getRow = (t) =>
         t.closest && t.closest('tr.zA, [data-legacy-thread-id], [data-thread-id]');
 
@@ -67,6 +75,6 @@
         if (!url) return;
         e.preventDefault();
         e.stopPropagation();
-        GM_openInTab(url, { active: false, insert: true, setParent: true });
+        openInTab(url);
     }, true);
 })();
