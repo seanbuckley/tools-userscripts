@@ -4,6 +4,11 @@ All notable changes to the scripts in this repo are documented here.
 
 ## gmail-middleclick
 
+### 2.1.1
+
+- Stopped treating short hex-looking search terms (e.g. `#search/abc123`) as a
+  trailing message id, which collapsed the view and produced a broken thread URL.
+
 ### 2.1.0
 
 - Renamed script file to `gmail-middleclick.user.js` so userscript managers

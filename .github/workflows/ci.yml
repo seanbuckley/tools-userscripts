@@ -21,7 +21,14 @@ jobs:
       - name: Validate Userscripts Syntax
         run: |
           echo "Checking JavaScript syntax for all .user.js files..."
-          for file in $(find . -name "*.user.js"); do
+          count=0
+          while IFS= read -r -d '' file; do
             echo "Checking $file"
             node --check "$file"
-          done
+            count=$((count + 1))
+          done < <(find . -name '*.user.js' -print0)
+          if [ "$count" -eq 0 ]; then
+            echo "No .user.js files found — expected at least one." >&2
+            exit 1
+          fi
+          echo "Checked $count file(s)."

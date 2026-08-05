@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Gmail Middle Click → Background Tab
 // @namespace    https://github.com/seanbuckley/userscripts
-// @version      2.1.0
+// @version      2.1.1
 // @description  Open Gmail threads in background tabs via middle click
 // @author       Sean Buckley
 // @license      MIT
@@ -37,8 +37,10 @@
         if (!hash) return 'inbox';
         const parts = hash.split('/');
         // A trailing segment that is a bare hex message id (legacy) or an
-        // "FMfc..." permalink id (current Gmail) is dropped.
-        if (parts.length > 1 && /^([0-9a-f]{6,}|FMfc[a-zA-Z0-9]+)$/i.test(parts[parts.length - 1])) {
+        // "FMfc..." permalink id (current Gmail) is dropped. Real ids are long
+        // — the 10-char floor keeps short hex-looking search terms (#search/abc123)
+        // from being mistaken for one.
+        if (parts.length > 1 && /^([0-9a-f]{10,}|FMfc[a-zA-Z0-9]+)$/i.test(parts[parts.length - 1])) {
             parts.pop();
         }
         const view = parts.join('/');
