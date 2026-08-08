@@ -1,13 +1,14 @@
 // ==UserScript==
 // @name         Gmail Middle Click → Background Tab
 // @namespace    https://github.com/seanbuckley/userscripts
-// @version      2.1.1
+// @version      2.2.0
 // @description  Open Gmail threads in background tabs via middle click
 // @author       Sean Buckley
 // @license      MIT
 // @match        https://mail.google.com/mail/*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=mail.google.com
 // @grant        GM_openInTab
+// @grant        GM.openInTab
 // @run-at       document-start
 // @noframes
 // @homepageURL  https://github.com/seanbuckley/userscripts
@@ -18,33 +19,45 @@
 (function () {
   'use strict';
 
-  // GM_openInTab is Violentmonkey/Tampermonkey. `insert` and `setParent` are
-  // manager-specific placement hints and are ignored elsewhere. Fall back to
-  // window.open so the click still does something under other managers.
+  // GM_openInTab is Violentmonkey/Tampermonkey; `insert` and `setParent` are
+  // manager-specific placement hints and are ignored elsewhere. GM.openInTab is
+  // the Greasemonkey 4 equivalent and still honours `active: false`.
+  //
+  // window.open is the last resort and is a real downgrade — there is no way to
+  // ask it for a background tab, so the click steals focus. That is the whole
+  // point of this script, so it is a fallback, not an equivalent.
   const openInTab =
     typeof GM_openInTab === 'function'
       ? (url) => GM_openInTab(url, { active: false, insert: true, setParent: true })
-      : (url) => window.open(url, '_blank');
+      : typeof GM !== 'undefined' && GM && typeof GM.openInTab === 'function'
+        ? (url) => GM.openInTab(url, { active: false })
+        : (url) => window.open(url, '_blank');
 
-  const getRow = (t) =>
-    t.closest && t.closest('tr.zA, [data-legacy-thread-id], [data-thread-id]');
+  // Only list rows. [data-thread-id] is deliberately absent: the open-conversation
+  // container carries it too, so including it made every middle click inside an
+  // open thread reopen that thread in a duplicate tab — and swallowed middle-click
+  // paste on Linux. threadUrl() still reads the attribute off the matched row.
+  const getRow = (t) => t.closest && t.closest('tr.zA, [data-legacy-thread-id]');
+
+  // Views that carry an argument: "#label/Work", "#search/invoice". Everything
+  // else ("#inbox", "#starred", "#snoozed") is a single segment.
+  const PARAMETERISED_VIEWS = new Set(['label', 'search', 'advanced-search', 'category']);
 
   // Gmail hashes look like "#inbox", "#inbox/<id>", "#search/<query>/<id>",
-  // "#label/Some-Label/<id>". Reuse everything except a trailing message id so
-  // the opened tab lands in the same view the click came from.
+  // "#label/Some-Label/<id>". Keep the view and drop anything after it, so the
+  // opened tab lands in the same view the click came from.
+  //
+  // This counts segments rather than trying to recognise a thread id. Gmail has
+  // several id formats (long hex, "FMfc…", "QgrcJ…", "Ktbx…") and matching them
+  // by pattern means every unrecognised format leaks into the view path and
+  // produces an unresolvable hash — while a pattern loose enough to catch them
+  // all starts eating real search terms.
   function currentView() {
     const hash = location.hash.replace(/^#/, '');
     if (!hash) return 'inbox';
     const parts = hash.split('/');
-    // A trailing segment that is a bare hex message id (legacy) or an
-    // "FMfc..." permalink id (current Gmail) is dropped. Real ids are long
-    // — the 10-char floor keeps short hex-looking search terms (#search/abc123)
-    // from being mistaken for one.
-    if (parts.length > 1 && /^([0-9a-f]{10,}|FMfc[a-zA-Z0-9]+)$/i.test(parts[parts.length - 1])) {
-      parts.pop();
-    }
-    const view = parts.join('/');
-    return view || 'all';
+    const keep = PARAMETERISED_VIEWS.has(parts[0]) ? 2 : 1;
+    return parts.slice(0, keep).join('/') || 'all';
   }
 
   function threadUrl(row) {
@@ -55,7 +68,10 @@
     const raw = el.getAttribute('data-legacy-thread-id') ||
                 el.getAttribute('data-thread-id');
     if (!raw) return null;
-    const id = raw.replace(/^thread-[fa]:/, '');
+    // data-legacy-thread-id is "thread-f:123…"; data-thread-id is "#thread-f:123…".
+    // Leaving the "#" in place would put a second fragment marker in the URL and
+    // truncate everything after it, landing on the bare inbox.
+    const id = raw.replace(/^#?thread-[fa]:/, '');
     const acct = (location.pathname.match(/\/mail\/u\/(\d+)/) || [, '0'])[1];
     return `https://mail.google.com/mail/u/${acct}/#${currentView()}/${id}`;
   }

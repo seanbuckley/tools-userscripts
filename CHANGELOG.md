@@ -4,6 +4,21 @@ All notable changes to the scripts in this repo are documented here.
 
 ## gmail-middleclick
 
+### 2.2.0
+
+- Derive the view by counting hash segments instead of pattern-matching a thread
+  id. Gmail uses several id formats (`FMfc…`, `QgrcJ…`, `Ktbx…`, long hex) and the
+  old regex only knew two, so the rest leaked into the view path and produced an
+  unresolvable URL.
+- Strip the leading `#` from `data-thread-id`. It was passed through into the
+  generated URL as a second fragment marker, truncating the rest and landing on
+  the bare inbox.
+- Removed `[data-thread-id]` from the row selector. The open-conversation
+  container carries that attribute, so middle-clicking anywhere inside an open
+  thread reopened it in a duplicate tab and swallowed middle-click paste on Linux.
+- Use `GM.openInTab` (Greasemonkey 4) before falling back to `window.open`, which
+  cannot open a background tab and so steals focus.
+
 ### 2.1.1
 
 - Stopped treating short hex-looking search terms (e.g. `#search/abc123`) as a
