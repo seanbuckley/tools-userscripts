@@ -61,8 +61,8 @@ Dashboard ➔ the script ➔ **Edit**) and add your token to both lines:
 // @downloadURL  https://YOUR_TOKEN@github.com/seanbuckley/userscripts/raw/refs/heads/master/gmail-middleclick/gmail-middleclick.user.js
 ```
 
-The Personal Access Token can be regenerated (as per above) in the [GitHub settings](https://github.com/settings/tokens). 
-The existing PAT is also saved in a Bitwarden vault and can be reused.
+The Personal Access Token can be regenerated (as per above) in the
+[GitHub settings](https://github.com/settings/tokens).
 
 Change these only in your local copy. A token committed to the repository is a
 published credential, so the versions tracked here stay tokenless.
@@ -70,6 +70,23 @@ published credential, so the versions tracked here stay tokenless.
 Tested with Violentmonkey and Tampermonkey. Other managers should work, but
 background-tab placement may differ — the tab-position hints used by the Gmail
 script are manager-specific.
+
+### Before making this repository public
+
+Everything above about tokens exists only because the repository is private.
+Going public makes the **Install** links and `@updateURL` work as written, and
+makes the whole PAT workflow unnecessary — but it also publishes the commit
+history, so do these in the same change:
+
+- [ ] **Revoke the PAT** used for private installs. Do this regardless of what
+      the files say: it is in browser extension config, in settings exports, and
+      possibly in sync backups.
+- [ ] **Delete the "Private Repository" section above**, including this checklist.
+- [ ] **Search the history, not just the working tree.** Deleting a line does not
+      remove it from earlier commits, and `git log -p` is public once the repo is.
+      `git log -p | grep -niE 'token|pat\b|secret|vault|password'` — anything that
+      names where a credential lives needs history rewriting, not just a new commit.
+- [ ] **Re-check the scripts** for anything account-specific added since.
 
 ## Layout
 
