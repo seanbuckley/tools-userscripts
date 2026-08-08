@@ -33,11 +33,8 @@
         ? (url) => GM.openInTab(url, { active: false })
         : (url) => window.open(url, '_blank');
 
-  // Only list rows. [data-thread-id] is deliberately absent: the open-conversation
-  // container carries it too, so including it made every middle click inside an
-  // open thread reopen that thread in a duplicate tab — and swallowed middle-click
-  // paste on Linux. threadUrl() still reads the attribute off the matched row.
-  const getRow = (t) => t.closest && t.closest('tr.zA, [data-legacy-thread-id]');
+  const getRow = (t) =>
+    t.closest && t.closest('tr.zA, [data-legacy-thread-id], [data-thread-id]');
 
   // Views that carry an argument: "#label/Work", "#search/invoice". Everything
   // else ("#inbox", "#starred", "#snoozed") is a single segment.
@@ -52,12 +49,14 @@
   // by pattern means every unrecognised format leaks into the view path and
   // produces an unresolvable hash — while a pattern loose enough to catch them
   // all starts eating real search terms.
-  function currentView() {
-    const hash = location.hash.replace(/^#/, '');
-    if (!hash) return 'inbox';
-    const parts = hash.split('/');
+  function splitHash() {
+    const parts = location.hash.replace(/^#/, '').split('/').filter(Boolean);
+    if (!parts.length) return { view: 'inbox', openId: null };
     const keep = PARAMETERISED_VIEWS.has(parts[0]) ? 2 : 1;
-    return parts.slice(0, keep).join('/') || 'all';
+    return {
+      view: parts.slice(0, keep).join('/') || 'all',
+      openId: parts[keep] || null,
+    };
   }
 
   function threadUrl(row) {
@@ -72,24 +71,37 @@
     // Leaving the "#" in place would put a second fragment marker in the URL and
     // truncate everything after it, landing on the bare inbox.
     const id = raw.replace(/^#?thread-[fa]:/, '');
+    const { view, openId } = splitHash();
+    // The open-conversation container carries data-thread-id too, so a click
+    // inside an open thread matches it as a "row". Reopening the thread you are
+    // already reading is never wanted, and claiming the click would swallow
+    // middle-click paste on Linux — so decline and let the browser have it.
+    //
+    // Best-effort: the hash and the DOM attribute do not always use the same id
+    // format, and when they disagree this comparison misses.
+    if (openId && openId === id) return null;
     const acct = (location.pathname.match(/\/mail\/u\/(\d+)/) || [, '0'])[1];
-    return `https://mail.google.com/mail/u/${acct}/#${currentView()}/${id}`;
+    return `https://mail.google.com/mail/u/${acct}/#${view}/${id}`;
   }
 
-  // Suppress autoscroll before auxclick fires
+  // What auxclick will do with this event, or null to leave it to the browser.
+  function urlFor(target) {
+    if (!target || !target.closest) return null;
+    if (target.closest('a[href]')) return null;
+    const row = getRow(target);
+    return row ? threadUrl(row) : null;
+  }
+
+  // Suppress autoscroll before auxclick fires — but only when we are going to
+  // claim the click, so clicks we decline keep their native behaviour.
   document.addEventListener('mousedown', (e) => {
     if (e.button !== 1) return;
-    if (e.target.closest && e.target.closest('a[href]')) return;
-    if (getRow(e.target)) e.preventDefault();
+    if (urlFor(e.target)) e.preventDefault();
   }, true);
 
   document.addEventListener('auxclick', (e) => {
     if (e.button !== 1) return;
-    // Let native middle-click handle genuine links inside a row.
-    if (e.target.closest && e.target.closest('a[href]')) return;
-    const row = getRow(e.target);
-    if (!row) return;
-    const url = threadUrl(row);
+    const url = urlFor(e.target);
     if (!url) return;
     e.preventDefault();
     e.stopPropagation();

@@ -13,9 +13,13 @@ All notable changes to the scripts in this repo are documented here.
 - Strip the leading `#` from `data-thread-id`. It was passed through into the
   generated URL as a second fragment marker, truncating the rest and landing on
   the bare inbox.
-- Removed `[data-thread-id]` from the row selector. The open-conversation
-  container carries that attribute, so middle-clicking anywhere inside an open
-  thread reopened it in a duplicate tab and swallowed middle-click paste on Linux.
+- Decline the click when the row's thread is the one already open. The
+  open-conversation container carries `data-thread-id` too, so middle-clicking
+  inside an open thread reopened it in a duplicate tab and swallowed
+  middle-click paste on Linux. Best-effort: the hash and the DOM attribute do
+  not always use the same id format, and the check misses when they disagree.
+- Only suppress autoscroll on mousedown when the click is one we will actually
+  claim, so declined clicks keep their native behaviour.
 - Use `GM.openInTab` (Greasemonkey 4) before falling back to `window.open`, which
   cannot open a background tab and so steals focus.
 
