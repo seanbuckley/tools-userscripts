@@ -4,6 +4,32 @@ All notable changes to the scripts in this repo are documented here.
 
 ## gmail-middleclick
 
+### 2.3.0
+
+- Open middle-clicked links inside an email in a background tab. Gmail calls
+  `preventDefault()` and `stopPropagation()` on the auxclick for links in a
+  message body (`_.iq.prototype.preventDefault` in its `m=b` bundle), so the
+  browser never opens them and the click does nothing at all. The script now
+  claims those clicks from its capture-phase listener, which runs before
+  Gmail's, and opens the href itself. Confined to links inside a rendered
+  message: list rows, the left nav and Gmail's own chrome already work and are
+  left to the browser. `javascript:`, `mailto:`, `data:` and bare fragments are
+  declined.
+
+### 2.2.1
+
+- Stop hijacking middle clicks inside an open conversation. The 2.2.0 guard
+  compared the row's thread id with the id in the hash, but Gmail routinely uses
+  different formats for the two (`#inbox/FMfcgz…` against
+  `data-thread-id="#thread-f:<digits>"`), so the comparison missed and every
+  middle click in the message body or thread header opened a redundant
+  background tab of the thread already on screen — and swallowed autoscroll and
+  middle-click paste along with it. The open conversation is now recognised by
+  the rendered messages it contains (`data-message-id` /
+  `data-legacy-message-id`), which no list row has, so it no longer depends on
+  either id format. The id comparison stays as a second check for the
+  split-pane case.
+
 ### 2.2.0
 
 - Derive the view by counting hash segments instead of pattern-matching a thread

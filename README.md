@@ -6,7 +6,7 @@ Custom user scripts for web annoyances.
 
 | Script | Purpose | Install |
 | --- | --- | --- |
-| Gmail Middle Click → Background Tab | Middle-click a thread in the list to open it in a background tab, instead of triggering autoscroll. | [Install](https://raw.githubusercontent.com/seanbuckley/userscripts/master/gmail-middleclick/gmail-middleclick.user.js) |
+| Gmail Middle Click → Background Tab | Middle-click a thread in the list, or a link inside an email, to open it in a background tab. | [Install](https://raw.githubusercontent.com/seanbuckley/userscripts/master/gmail-middleclick/gmail-middleclick.user.js) |
 
 While this repository is private the **Install** links above return 404 for
 anyone not signed in — see [Private Repository](#private-repository-installing-via-personal-access-token)
