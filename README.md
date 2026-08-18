@@ -7,6 +7,7 @@ Custom user scripts for web annoyances.
 | Script | Purpose | Install |
 | --- | --- | --- |
 | Gmail Middle Click → Background Tab | Middle-click a thread in the list, or a link inside an email, to open it in a background tab. | [Install](https://raw.githubusercontent.com/seanbuckley/userscripts/master/gmail-middleclick/gmail-middleclick.user.js) |
+| RedFlagDeals Affiliate Link Cleaner | Rewrite deal links and links in posts to point at the merchant directly, instead of through an affiliate redirector. | [Install](https://raw.githubusercontent.com/seanbuckley/userscripts/master/redflagdeals-affiliate-cleaner/redflagdeals-affiliate-cleaner.user.js) |
 
 While this repository is private the **Install** links above return 404 for
 anyone not signed in — see [Private Repository](#private-repository-installing-via-personal-access-token)
@@ -99,7 +100,13 @@ new scripts: copy it into a new directory, rename it, and fill in the metadata
 block (including `@updateURL` and `@downloadURL`, which point at the script's own
 Raw URL once its path is known).
 
+A script may sit alongside a `*.test.mjs` file covering its pure logic — run it
+with `node <path>`. `redflagdeals-affiliate-cleaner/clean-url.test.mjs` is the
+expected-results table for that script's URL parsing, built from saved pages;
+extend it when adding an affiliate network.
+
 CI runs `node --check` against every `*.user.js` file on push and pull request.
+It does not run the `*.test.mjs` files.
 
 ## Licence
 
