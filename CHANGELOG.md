@@ -2,6 +2,38 @@
 
 All notable changes to the scripts in this repo are documented here.
 
+## redflagdeals-affiliate-cleaner
+
+### 1.0.0
+
+- Initial release: rewrite RedFlagDeals deal links and in-post links to point at
+  the merchant directly.
+- Unwraps Skimlinks (`go.redirectingat.com`), Impact Radius (`*.o93x.net`,
+  `*.evyy.net`), Rakuten/LinkSynergy (`click.linksynergy.com`) and AvantLink,
+  all confirmed against saved pages; entries for Commission Junction,
+  ShareASale, AWIN, prf.hn and VigLink are those networks' standard formats but
+  are unconfirmed on RFD and marked as such in the code.
+- Impact Radius `u=` is percent-encoded on some hosts and bare on others, so the
+  encoding is detected per link. The bare form is the awkward one: the
+  destination's own query string runs on into the wrapper's, and the affiliate's
+  `subId1` can hang off the path with no `?` at all, where no URL parser sees it.
+- Strips affiliate parameters (`CJEVENT`, `subId1`, `u1`, Amazon's `tag`, and
+  `utm_*` only when the campaign names RedFlagDeals or "affiliate") from links
+  that arrive unwrapped, and from the result of unwrapping.
+- Parameter stripping is confined to deal and post containers, because a bare URL
+  carrying tracking parameters is otherwise indistinguishable from RFD's own
+  internal links. Unwrapping a known redirector is safe anywhere on the page.
+- Leaves paid placements alone. On the front page the "Sponsors" row is built
+  from the same markup as the real deal tiles, so only the host distinguishes
+  them; doubleclick and friends are on a denylist.
+- Cross-checks the destination against the host shown in the link's own text
+  (`deal_info_url_display`, or an autolinked URL's text) and declines the rewrite
+  when they disagree. Those strings are truncated for display, so only the host
+  is comparable.
+- Marks cleaned links with `data-rfd-cleaned` and a dotted green underline, so a
+  page with nothing to clean is distinguishable from a script that has stopped
+  working. `CONFIG.dryRun` logs what would change without touching the page.
+
 ## gmail-middleclick
 
 ### 2.3.0
