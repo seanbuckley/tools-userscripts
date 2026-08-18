@@ -4,6 +4,18 @@ All notable changes to the scripts in this repo are documented here.
 
 ## gmail-middleclick
 
+### 2.3.0
+
+- Open middle-clicked links inside an email in a background tab. Gmail calls
+  `preventDefault()` and `stopPropagation()` on the auxclick for links in a
+  message body (`_.iq.prototype.preventDefault` in its `m=b` bundle), so the
+  browser never opens them and the click does nothing at all. The script now
+  claims those clicks from its capture-phase listener, which runs before
+  Gmail's, and opens the href itself. Confined to links inside a rendered
+  message: list rows, the left nav and Gmail's own chrome already work and are
+  left to the browser. `javascript:`, `mailto:`, `data:` and bare fragments are
+  declined.
+
 ### 2.2.1
 
 - Stop hijacking middle clicks inside an open conversation. The 2.2.0 guard

@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         Gmail Middle Click → Background Tab
 // @namespace    https://github.com/seanbuckley/userscripts
-// @version      2.2.1
-// @description  Open Gmail threads in background tabs via middle click
+// @version      2.3.0
+// @description  Open Gmail threads and in-email links in background tabs via middle click
 // @author       Sean Buckley
 // @license      MIT
 // @match        https://mail.google.com/mail/*
@@ -95,10 +95,28 @@
     return `https://mail.google.com/mail/u/${acct}/#${view}/${id}`;
   }
 
+  // Gmail calls preventDefault() and stopPropagation() on the auxclick for links
+  // inside a message body, so the browser never gets to open them and a middle
+  // click on a link in an email does nothing at all. Claim those and open them
+  // ourselves — our listener is on document in the capture phase, so it runs
+  // before Gmail's and stops the event from reaching it.
+  //
+  // Only inside a message. Everywhere else — list rows, the left nav, Gmail's
+  // own chrome — middle click already works, and taking it over would risk
+  // breaking what works to fix what does not.
+  function linkUrl(a) {
+    if (!a.closest(MESSAGE)) return null;
+    // Web links only. javascript:, mailto:, data: and bare fragments are either
+    // meaningless in a background tab or unsafe to hand to openInTab. Declining
+    // leaves them exactly as they are today.
+    return /^https?:$/.test(a.protocol) ? a.href : null;
+  }
+
   // What auxclick will do with this event, or null to leave it to the browser.
   function urlFor(target) {
     if (!target || !target.closest) return null;
-    if (target.closest('a[href]')) return null;
+    const link = target.closest('a[href]');
+    if (link) return linkUrl(link);
     // Inside a rendered message: the open conversation, not a list row. Checked
     // on the target as well as on the row because the row lookup walks up to
     // the conversation container, which is a match for either.
