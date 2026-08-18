@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Gmail Middle Click → Background Tab
 // @namespace    https://github.com/seanbuckley/userscripts
-// @version      2.2.0
+// @version      2.2.1
 // @description  Open Gmail threads in background tabs via middle click
 // @author       Sean Buckley
 // @license      MIT
@@ -35,6 +35,12 @@
 
   const getRow = (t) =>
     t.closest && t.closest('tr.zA, [data-legacy-thread-id], [data-thread-id]');
+
+  // Gmail hangs a message id on every rendered message. They exist only inside
+  // an open conversation — a list row has none — so they mark the boundary
+  // between "the list" and "the thread you are reading" without depending on
+  // Gmail's obfuscated class names or on any thread-id format.
+  const MESSAGE = '[data-message-id], [data-legacy-message-id]';
 
   // Views that carry an argument: "#label/Work", "#search/invoice". Everything
   // else ("#inbox", "#starred", "#snoozed") is a single segment.
@@ -71,14 +77,19 @@
     // Leaving the "#" in place would put a second fragment marker in the URL and
     // truncate everything after it, landing on the bare inbox.
     const id = raw.replace(/^#?thread-[fa]:/, '');
-    const { view, openId } = splitHash();
     // The open-conversation container carries data-thread-id too, so a click
     // inside an open thread matches it as a "row". Reopening the thread you are
     // already reading is never wanted, and claiming the click would swallow
-    // middle-click paste on Linux — so decline and let the browser have it.
+    // middle-click paste and autoscroll — so decline and let the browser have it.
     //
-    // Best-effort: the hash and the DOM attribute do not always use the same id
-    // format, and when they disagree this comparison misses.
+    // Detect that by the messages the container holds rather than by comparing
+    // ids: the hash and the DOM attribute routinely use different id formats
+    // (hash "#inbox/FMfc…" against attribute "thread-f:<digits>"), so an id
+    // comparison misses on exactly the threads Gmail links to today.
+    if (el.querySelector(MESSAGE)) return null;
+    const { view, openId } = splitHash();
+    // Still worth comparing when the formats do agree: in split-pane view the
+    // list row of the open thread is clickable, and reopening it is not wanted.
     if (openId && openId === id) return null;
     const acct = (location.pathname.match(/\/mail\/u\/(\d+)/) || [, '0'])[1];
     return `https://mail.google.com/mail/u/${acct}/#${view}/${id}`;
@@ -88,6 +99,10 @@
   function urlFor(target) {
     if (!target || !target.closest) return null;
     if (target.closest('a[href]')) return null;
+    // Inside a rendered message: the open conversation, not a list row. Checked
+    // on the target as well as on the row because the row lookup walks up to
+    // the conversation container, which is a match for either.
+    if (target.closest(MESSAGE)) return null;
     const row = getRow(target);
     return row ? threadUrl(row) : null;
   }

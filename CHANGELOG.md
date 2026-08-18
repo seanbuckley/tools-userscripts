@@ -4,6 +4,20 @@ All notable changes to the scripts in this repo are documented here.
 
 ## gmail-middleclick
 
+### 2.2.1
+
+- Stop hijacking middle clicks inside an open conversation. The 2.2.0 guard
+  compared the row's thread id with the id in the hash, but Gmail routinely uses
+  different formats for the two (`#inbox/FMfcgz…` against
+  `data-thread-id="#thread-f:<digits>"`), so the comparison missed and every
+  middle click in the message body or thread header opened a redundant
+  background tab of the thread already on screen — and swallowed autoscroll and
+  middle-click paste along with it. The open conversation is now recognised by
+  the rendered messages it contains (`data-message-id` /
+  `data-legacy-message-id`), which no list row has, so it no longer depends on
+  either id format. The id comparison stays as a second check for the
+  split-pane case.
+
 ### 2.2.0
 
 - Derive the view by counting hash segments instead of pattern-matching a thread
