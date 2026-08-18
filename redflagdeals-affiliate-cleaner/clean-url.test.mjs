@@ -51,8 +51,16 @@ const cases = [
  ['http://click.linksynergy.com/deeplink?id=CAqD7bLWUPI&mid=45854&murl=https%3A%2F%2Fwww.zwilling.com%2Fca%2Fsale%2Fsummer-clearance%2F%3Fstart%3D32%26sz%3D32&u1=rfdcb', S, 'https://www.zwilling.com/ca/sale/summer-clearance/?start=32&sz=32'],
  // AvantLink
  ['https://www.avantlink.com/click.php?tt=ml&ti=863485&pw=144787&url=https%3A%2F%2Fwww.mec.ca%2Fen%2Fproducts%2Fdeals', S, 'https://www.mec.ca/en/products/deals'],
- // Bare Amazon deal button: drop tag, keep th=1
- ['https://www.amazon.ca/dp/B08LDN5451?th=1&tag=redflagdealsc-20', S, 'https://www.amazon.ca/dp/B08LDN5451?th=1'],
+ // Amazon product page: reduce to the ASIN and drop the whole query. The
+ // affiliate marker is ref_/tag, but pf_rd_*, sbo, psc and th are cruft too, so
+ // rather than chase a parameter list we keep the path up to the ASIN.
+ ['https://www.amazon.ca/dp/B08LDN5451?th=1&tag=redflagdealsc-20', S, 'https://www.amazon.ca/dp/B08LDN5451'],
+ // Real deal button (adidas duffel), post-`tag`-strip, still carrying ref_=as_li_ss_tl and friends.
+ ['https://www.amazon.ca/Defender-Medium-Duffel-Bag-59L/dp/B0CYTY31MQ?pf_rd_r=TWM7H5KBJR3H43R77QW5&pf_rd_p=9b9e9752-666b-453b-9a71-be47c722201b&sbo=RZvfv%2F%2FHxDF%2BO5021pAnSA%3D%3D&th=1&ref_=as_li_ss_tl&psc=1', S, 'https://www.amazon.ca/Defender-Medium-Duffel-Bag-59L/dp/B0CYTY31MQ'],
+ // A trailing /ref=… path segment (not a query param) is dropped too.
+ ['https://www.amazon.ca/gp/product/B0BBYNPV33/ref=ppx_yo_dt_b_asin_title', S, 'https://www.amazon.ca/gp/product/B0BBYNPV33'],
+ // Amazon search is NOT a product page: its query is the whole point, keep it.
+ ['https://www.amazon.ca/s?k=duffel+bag', S, null],
  // Bare merchant URL with CJ + RFD utm params
  ['https://www.canadiantire.ca/?utm_medium=Affiliate&utm_campaign=Hot_Online_Deals&CJEVENT=6bbb38c36a9311e981df00010a24060b&utm_source=RedFlagDeals.com', S, 'https://www.canadiantire.ca/'],
  // MUST BE LEFT ALONE
@@ -60,7 +68,7 @@ const cases = [
  ['https://www.londondrugs.com/search?q=BUDDYCARE&pickup=true&ship=true&autoFiltersApplied=true', S, null],
  ['https://shop.lululemon.com/en-ca/p/mens-jackets-and-hoodies-jackets/Navigation-Down-Jacket-Evolve-MD/_/prod20007545?color=70108', S, null],
  ['https://www.costco.ca/p/-/meyer-accolade-stainless-steel-skillets-3-pieces/4000239910?langId=-24', S, null],
- ['https://www.amazon.ca/dp/B08LDN5451?th=1', S, null],
+ ['https://www.amazon.ca/dp/B08LDN5451', S, null],
  ['https://ad.doubleclick.net/ddm/trackclk/N307601.2181304VERTICALSCOPE/B34323703.432094375;dc_trk_aid=625994539;dc_trk_cid=244077725', S, null],
  ['https://forums.redflagdeals.com/hot-deals-f9/', S, null],
  ['https://www.redflagdeals.com/alerts/insert?source=deal&alerts_form=1&alert_keywords=Amazon.ca', S, null],
@@ -69,11 +77,15 @@ const cases = [
  ['http://go.redirectingat.com/?id=130832X1694315&xs=1&url=https%3A%2F%2Fwww.yeti.ca%2Fcustomize', false, 'https://www.yeti.ca/customize'],
  // ...but a bare tracking-param URL outside deal content is left alone
  ['https://www.canadiantire.ca/?utm_medium=Affiliate&CJEVENT=abc&utm_source=RedFlagDeals.com', false, null],
- // Encoding fidelity through a Skimlinks payload. `%2B` is a literal plus and
- // `+` would be a space, so a decode too many silently changes the search
- // terms; `%C2%AE` in the path is the URL parser's own normalisation of `®`.
- ['http://go.redirectingat.com/?id=130832X1694315&xs=1&url=https%3A%2F%2Fwww.amazon.ca%2FBarista-Express%25C2%25AE-Espresso%2Fdp%2FB0BBYNPV33%2Fref%3Dsr_1_1%3Fcrid%3D1C8RJZ2YOC7VE%26keywords%3DBreville%252BBarista%26ufe%3Dapp_do%253Aamzn1.fos.abc%26th%3D1%26tag%3Dredflagdealsc-20', S,
-  'https://www.amazon.ca/Barista-Express%C2%AE-Espresso/dp/B0BBYNPV33/ref=sr_1_1?crid=1C8RJZ2YOC7VE&keywords=Breville%2BBarista&ufe=app_do%3Aamzn1.fos.abc&th=1'],
+ // An Amazon product URL nested in a Skimlinks payload: unwrap, then canonicalise
+ // to the ASIN. `%C2%AE` in the path is the URL parser's own normalisation of `®`.
+ ['http://go.redirectingat.com/?id=130832X1694315&xs=1&url=https%3A%2F%2Fwww.amazon.ca%2FBarista-Express%25C2%25AE-Espresso%2Fdp%2FB0BBYNPV33%2Fref%3Dsr_1_1%3Fcrid%3D1C8RJZ2YOC7VE%26th%3D1%26tag%3Dredflagdealsc-20', S,
+  'https://www.amazon.ca/Barista-Express%C2%AE-Espresso/dp/B0BBYNPV33'],
+ // Encoding fidelity on a NON-Amazon merchant, whose query we keep: `%2B` is a
+ // literal plus and `+` would be a space, so a decode too many silently changes
+ // the search terms. Nothing is stripped here, so it must be left byte-for-byte.
+ ['http://go.redirectingat.com/?id=130832X1694315&xs=1&url=https%3A%2F%2Fwww.zwilling.com%2Fca%2Fsearch%3Fq%3DBreville%252BBarista%26ufe%3Dapp_do%253Aamzn1', S,
+  'https://www.zwilling.com/ca/search?q=Breville%2BBarista&ufe=app_do%3Aamzn1'],
  // Parameters that are nobody's tracking: left byte-for-byte alone, because
  // re-serialising a query can change escaping that was fine as it was.
  ['https://www.lego.com/en-ca/x?offset=0&locale=en-ca&slug.i0=sales-and-deals', S, null],

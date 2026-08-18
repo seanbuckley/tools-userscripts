@@ -4,6 +4,20 @@ All notable changes to the scripts in this repo are documented here.
 
 ## redflagdeals-affiliate-cleaner
 
+### 1.1.0
+
+- Reduce Amazon product links to their ASIN (`…/dp/<ASIN>`, slug kept) and drop
+  the whole query. The `tag` strip in 1.0.0 missed `ref_=as_li_ss_tl` — the other
+  Associates marker RFD leaves — along with `pf_rd_*`, `sbo`, `psc` and `th`, so
+  a link came out still tagged. Amazon search and storefront URLs keep their
+  query, since there the parameters are the content.
+- Add `rel="noreferrer noopener"` to every cleaned link. Best Buy's bot wall
+  (Akamai) returns Access Denied for a direct product URL when the click carries
+  a `forums.redflagdeals.com` referrer — the same URL loads fine when typed. The
+  affiliate redirector used to absorb that referrer; pointing straight at the
+  merchant exposed it. Sending no referrer both fixes the block and is the right
+  default once the affiliate relationship is stripped.
+
 ### 1.0.0
 
 - Initial release: rewrite RedFlagDeals deal links and in-post links to point at
