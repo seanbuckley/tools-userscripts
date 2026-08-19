@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         RedFlagDeals Affiliate Link Cleaner
 // @namespace    https://github.com/seanbuckley/userscripts
-// @version      1.0.0
+// @version      1.1.0
 // @description  Point RedFlagDeals deal links and in-post links straight at the merchant instead of through an affiliate redirector
 // @author       Sean Buckley
 // @license      MIT
@@ -223,6 +223,32 @@
   // that was fine as it was — so a rewrite has to be earned, not incidental.
   function stripParams(url) {
     const isAmazon = AMAZON_HOST.test(url.hostname);
+
+    // An Amazon product URL is identified by its ASIN, and everything else in it
+    // is disposable: the affiliate marker RFD leaves is `ref_=as_li_ss_tl`, but
+    // the `tag=`, `pf_rd_*`, `sbo`, `psc`, `th` and the `/ref=…` path segment are
+    // all tracking or session cruft that a narrow parameter list keeps missing.
+    // So for a product page we keep the path up to and including the ASIN — slug
+    // and all, matching what the address bar shows — and drop the rest.
+    if (isAmazon) {
+      const asin = url.pathname.match(
+        /\/(?:dp|gp\/product|gp\/aw\/d|gp\/offer-listing|gp\/aw\/d)\/([A-Z0-9]{10})(?=[/?]|$)/i,
+      );
+      if (asin) {
+        const end = asin.index + asin[0].length;
+        const trimmedPath = url.pathname.slice(0, end);
+        if (trimmedPath !== url.pathname || url.search) {
+          url.pathname = trimmedPath;
+          url.search = '';
+          return true;
+        }
+        return false;
+      }
+      // A non-product Amazon URL (search, storefront) keeps its query — dropping
+      // it would throw away the search terms — so it falls through to the
+      // parameter-by-parameter strip below.
+    }
+
     // Read the names first: deleting while iterating a live URLSearchParams
     // skips entries.
     const names = [...new Set([...url.searchParams.keys()])];
@@ -361,9 +387,20 @@
 
     anchor.dataset.rfdCleaned = '1';
     anchor.setAttribute('href', cleaned);
+    // Force `rel="noreferrer noopener"`. The affiliate link used to bounce
+    // through the redirector, so the merchant only ever saw the redirector as
+    // the referrer; pointing straight at the merchant would instead hand it
+    // `forums.redflagdeals.com`. Best Buy's bot wall (Akamai) denies exactly
+    // that — the direct URL loads fine when typed but 403s when clicked from
+    // RFD — and sending no referrer is the right call anyway once the affiliate
+    // relationship is gone. `noopener` comes along because these open in a new
+    // tab. Existing tokens (RFD's `nofollow`) are kept.
+    const rel = new Set((anchor.getAttribute('rel') || '').split(/\s+/).filter(Boolean));
+    rel.add('noreferrer');
+    rel.add('noopener');
+    anchor.setAttribute('rel', [...rel].join(' '));
     // Replace RFD's "RedFlagDeals.com Affiliate Link" title, which is no longer
-    // true of this link. `rel` is left alone on purpose: dropping `noreferrer`
-    // to tidy up would start leaking the referrer to the merchant.
+    // true of this link.
     anchor.title = `Cleaned → ${new URL(cleaned).hostname}`;
     log('cleaned\n  from', href, '\n    to', cleaned);
     return true;
