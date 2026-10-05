@@ -2,6 +2,16 @@
 
 All notable changes to the scripts in this repo are documented here.
 
+## share-link-cleaner
+
+### 1.0.0
+
+- Initial release: strip Reddit `share_id` and `utm_*`, and `ref=selfh.st` on
+  any site, from the address bar with `history.replaceState`. Surviving
+  parameters keep their original encoding.
+- README documents matching uBlock Origin `removeparam` filters, which strip the
+  parameters before the request is sent.
+
 ## redflagdeals-affiliate-cleaner
 
 ### 1.1.0
