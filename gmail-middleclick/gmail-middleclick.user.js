@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Gmail Middle Click → Background Tab
-// @namespace    https://github.com/seanbuckley/userscripts
+// @namespace    https://github.com/seanbuckley/tools-userscripts
 // @version      2.3.0
 // @description  Open Gmail threads and in-email links in background tabs via middle click
 // @author       Sean Buckley

@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Script Name
-// @namespace    https://github.com/seanbuckley/userscripts
+// @namespace    https://github.com/seanbuckley/tools-userscripts
 // @version      1.0.0
 // @description  Brief description of what this script does
 // @author       Sean Buckley

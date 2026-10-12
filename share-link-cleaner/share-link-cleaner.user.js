@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Share Link Cleaner
-// @namespace    https://github.com/seanbuckley/userscripts
+// @namespace    https://github.com/seanbuckley/tools-userscripts
 // @version      1.1.0
 // @description  Strip share and referral tracking parameters (Reddit share_id, ?ref=selfh.st, ?ref=sidebar) from the address bar so a copied or saved URL comes out clean
 // @author       Sean Buckley
