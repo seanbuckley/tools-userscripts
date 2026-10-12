@@ -9,8 +9,8 @@
 // @grant        none
 // @run-at       document-start
 // @noframes
-// @homepageURL  https://github.com/seanbuckley/userscripts
-// @supportURL   https://github.com/seanbuckley/userscripts/issues
+// @homepageURL  https://github.com/seanbuckley/tools-userscripts
+// @supportURL   https://github.com/seanbuckley/tools-userscripts/issues
 // ==/UserScript==
 (function () {
   'use strict';

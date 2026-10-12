@@ -9,10 +9,10 @@
 // @grant        none
 // @run-at       document-start
 // @noframes
-// @homepageURL  https://github.com/seanbuckley/userscripts
-// @supportURL   https://github.com/seanbuckley/userscripts/issues
-// @updateURL    https://raw.githubusercontent.com/seanbuckley/userscripts/master/share-link-cleaner/share-link-cleaner.user.js
-// @downloadURL  https://raw.githubusercontent.com/seanbuckley/userscripts/master/share-link-cleaner/share-link-cleaner.user.js
+// @homepageURL  https://github.com/seanbuckley/tools-userscripts
+// @supportURL   https://github.com/seanbuckley/tools-userscripts/issues
+// @updateURL    https://raw.githubusercontent.com/seanbuckley/tools-userscripts/master/share-link-cleaner/share-link-cleaner.user.js
+// @downloadURL  https://raw.githubusercontent.com/seanbuckley/tools-userscripts/master/share-link-cleaner/share-link-cleaner.user.js
 // ==/UserScript==
 (function () {
   'use strict';

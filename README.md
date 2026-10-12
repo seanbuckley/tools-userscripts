@@ -6,9 +6,9 @@ Custom user scripts for web annoyances.
 
 | Script | Purpose | Install |
 | --- | --- | --- |
-| Gmail Middle Click → Background Tab | Middle-click a thread in the list, or a link inside an email, to open it in a background tab. | [Install](https://raw.githubusercontent.com/seanbuckley/userscripts/master/gmail-middleclick/gmail-middleclick.user.js) |
-| RedFlagDeals Affiliate Link Cleaner | Rewrite deal links and links in posts to point at the merchant directly, instead of through an affiliate redirector. | [Install](https://raw.githubusercontent.com/seanbuckley/userscripts/master/redflagdeals-affiliate-cleaner/redflagdeals-affiliate-cleaner.user.js) |
-| Share Link Cleaner | Strip share and referral tracking parameters (Reddit `share_id`, `?ref=selfh.st`, generic `?ref=sidebar`-style tags) from the address bar. Pair with the uBlock Origin filters in its [README](share-link-cleaner/README.md). | [Install](https://raw.githubusercontent.com/seanbuckley/userscripts/master/share-link-cleaner/share-link-cleaner.user.js) |
+| Gmail Middle Click → Background Tab | Middle-click a thread in the list, or a link inside an email, to open it in a background tab. | [Install](https://raw.githubusercontent.com/seanbuckley/tools-userscripts/master/gmail-middleclick/gmail-middleclick.user.js) |
+| RedFlagDeals Affiliate Link Cleaner | Rewrite deal links and links in posts to point at the merchant directly, instead of through an affiliate redirector. | [Install](https://raw.githubusercontent.com/seanbuckley/tools-userscripts/master/redflagdeals-affiliate-cleaner/redflagdeals-affiliate-cleaner.user.js) |
+| Share Link Cleaner | Strip share and referral tracking parameters (Reddit `share_id`, `?ref=selfh.st`, generic `?ref=sidebar`-style tags) from the address bar. Pair with the uBlock Origin filters in its [README](share-link-cleaner/README.md). | [Install](https://raw.githubusercontent.com/seanbuckley/tools-userscripts/master/share-link-cleaner/share-link-cleaner.user.js) |
 
 While this repository is private the **Install** links above return 404 for
 anyone not signed in — see [Private Repository](#private-repository-installing-via-personal-access-token)
@@ -34,7 +34,7 @@ If loading from a private GitHub repository:
 3. Click the **`+`** button in the top right and choose **Install from URL**.
 4. Enter the file URL with your token in front of the host:
    ```text
-   https://YOUR_TOKEN@github.com/seanbuckley/userscripts/raw/refs/heads/master/gmail-middleclick/gmail-middleclick.user.js
+   https://YOUR_TOKEN@github.com/seanbuckley/tools-userscripts/raw/refs/heads/master/gmail-middleclick/gmail-middleclick.user.js
    ```
 5. Click **Confirm Installation**.
 
@@ -59,8 +59,8 @@ To make updates work, edit your **installed** copy of the script (Violentmonkey
 Dashboard ➔ the script ➔ **Edit**) and add your token to both lines:
 
 ```text
-// @updateURL    https://YOUR_TOKEN@github.com/seanbuckley/userscripts/raw/refs/heads/master/gmail-middleclick/gmail-middleclick.user.js
-// @downloadURL  https://YOUR_TOKEN@github.com/seanbuckley/userscripts/raw/refs/heads/master/gmail-middleclick/gmail-middleclick.user.js
+// @updateURL    https://YOUR_TOKEN@github.com/seanbuckley/tools-userscripts/raw/refs/heads/master/gmail-middleclick/gmail-middleclick.user.js
+// @downloadURL  https://YOUR_TOKEN@github.com/seanbuckley/tools-userscripts/raw/refs/heads/master/gmail-middleclick/gmail-middleclick.user.js
 ```
 
 The Personal Access Token can be regenerated (as per above) in the
