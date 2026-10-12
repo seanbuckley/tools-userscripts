@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Gmail Middle Click → Background Tab
-// @namespace    https://github.com/seanbuckley/userscripts
+// @namespace    https://github.com/seanbuckley/tools-userscripts
 // @version      2.3.0
 // @description  Open Gmail threads and in-email links in background tabs via middle click
 // @author       Sean Buckley
@@ -11,10 +11,10 @@
 // @grant        GM.openInTab
 // @run-at       document-start
 // @noframes
-// @homepageURL  https://github.com/seanbuckley/userscripts
-// @supportURL   https://github.com/seanbuckley/userscripts/issues
-// @updateURL    https://raw.githubusercontent.com/seanbuckley/userscripts/master/gmail-middleclick/gmail-middleclick.user.js
-// @downloadURL  https://raw.githubusercontent.com/seanbuckley/userscripts/master/gmail-middleclick/gmail-middleclick.user.js
+// @homepageURL  https://github.com/seanbuckley/tools-userscripts
+// @supportURL   https://github.com/seanbuckley/tools-userscripts/issues
+// @updateURL    https://raw.githubusercontent.com/seanbuckley/tools-userscripts/master/gmail-middleclick/gmail-middleclick.user.js
+// @downloadURL  https://raw.githubusercontent.com/seanbuckley/tools-userscripts/master/gmail-middleclick/gmail-middleclick.user.js
 // ==/UserScript==
 (function () {
   'use strict';

@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         RedFlagDeals Affiliate Link Cleaner
-// @namespace    https://github.com/seanbuckley/userscripts
+// @namespace    https://github.com/seanbuckley/tools-userscripts
 // @version      1.1.0
 // @description  Point RedFlagDeals deal links and in-post links straight at the merchant instead of through an affiliate redirector
 // @author       Sean Buckley
@@ -11,10 +11,10 @@
 // @grant        none
 // @run-at       document-idle
 // @noframes
-// @homepageURL  https://github.com/seanbuckley/userscripts
-// @supportURL   https://github.com/seanbuckley/userscripts/issues
-// @updateURL    https://raw.githubusercontent.com/seanbuckley/userscripts/master/redflagdeals-affiliate-cleaner/redflagdeals-affiliate-cleaner.user.js
-// @downloadURL  https://raw.githubusercontent.com/seanbuckley/userscripts/master/redflagdeals-affiliate-cleaner/redflagdeals-affiliate-cleaner.user.js
+// @homepageURL  https://github.com/seanbuckley/tools-userscripts
+// @supportURL   https://github.com/seanbuckley/tools-userscripts/issues
+// @updateURL    https://raw.githubusercontent.com/seanbuckley/tools-userscripts/master/redflagdeals-affiliate-cleaner/redflagdeals-affiliate-cleaner.user.js
+// @downloadURL  https://raw.githubusercontent.com/seanbuckley/tools-userscripts/master/redflagdeals-affiliate-cleaner/redflagdeals-affiliate-cleaner.user.js
 // ==/UserScript==
 (function () {
   'use strict';

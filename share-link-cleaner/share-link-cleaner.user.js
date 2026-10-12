@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Share Link Cleaner
-// @namespace    https://github.com/seanbuckley/userscripts
+// @namespace    https://github.com/seanbuckley/tools-userscripts
 // @version      1.1.0
 // @description  Strip share and referral tracking parameters (Reddit share_id, ?ref=selfh.st, ?ref=sidebar) from the address bar so a copied or saved URL comes out clean
 // @author       Sean Buckley
@@ -9,10 +9,10 @@
 // @grant        none
 // @run-at       document-start
 // @noframes
-// @homepageURL  https://github.com/seanbuckley/userscripts
-// @supportURL   https://github.com/seanbuckley/userscripts/issues
-// @updateURL    https://raw.githubusercontent.com/seanbuckley/userscripts/master/share-link-cleaner/share-link-cleaner.user.js
-// @downloadURL  https://raw.githubusercontent.com/seanbuckley/userscripts/master/share-link-cleaner/share-link-cleaner.user.js
+// @homepageURL  https://github.com/seanbuckley/tools-userscripts
+// @supportURL   https://github.com/seanbuckley/tools-userscripts/issues
+// @updateURL    https://raw.githubusercontent.com/seanbuckley/tools-userscripts/master/share-link-cleaner/share-link-cleaner.user.js
+// @downloadURL  https://raw.githubusercontent.com/seanbuckley/tools-userscripts/master/share-link-cleaner/share-link-cleaner.user.js
 // ==/UserScript==
 (function () {
   'use strict';
