@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         Share Link Cleaner
 // @namespace    https://github.com/seanbuckley/userscripts
-// @version      1.0.0
-// @description  Strip share and referral tracking parameters (Reddit share_id, ?ref=selfh.st) from the address bar so a copied or saved URL comes out clean
+// @version      1.1.0
+// @description  Strip share and referral tracking parameters (Reddit share_id, ?ref=selfh.st, ?ref=sidebar) from the address bar so a copied or saved URL comes out clean
 // @author       Sean Buckley
 // @license      MIT
 // @match        *://*/*
@@ -28,12 +28,20 @@
     debug: false,
   };
 
+  // `ref=` values that are only ever a referral tag. Kept as one literal so the
+  // uBlock Origin filter in the README can be a copy of it. No `i` flag and no
+  // `{n,}` quantifier, since uBO would need the comma escaped.
+  const REF_TRACKING = /^ref=(([a-z0-9-]+\.)+[a-z][a-z]+|(sidebar|nav|navbar|menu|header|footer|home|homepage|banner|newsletter|email|rss|feed|share|social|twitter|facebook|linkedin|reddit|hn|hackernews|producthunt|blog|related|widget|cta)([-_][a-z0-9]+)*)$/;
+
   // Each rule names the hosts it applies to and the parameters to drop there.
   //   host:     matched against location.hostname; `null` means every site
   //   names:    parameter names to drop whatever their value
   //   prefixes: drop any parameter whose name starts with one of these
   //   pairs:    exact name/value pairs to drop, for a name that is content
   //             elsewhere (`ref` is a real parameter on plenty of sites)
+  //   patterns: regexes tested against the decoded `name=value`, the same way
+  //             uBO's `removeparam=/…/` is, so the README filter can copy them
+  //   except:   hosts the rule skips even when `host` matches
   const RULES = [
     // Reddit app share sheet. share_id ties the visit to whoever shared it;
     // older app builds used utm_* instead. Neither is ever page content.
@@ -41,12 +49,23 @@
     // Ghost newsletters tag every outbound link with ?ref=<newsletter host>.
     // Only selfh.st's own value is dropped, so other uses of `ref` survive.
     { host: null, pairs: [['ref', 'selfh.st']] },
+    // Generic ?ref= referral tags: a referring hostname (producthunt.com,
+    // news.ycombinator.com) or a page placement (sidebar, footer, newsletter).
+    // Anything else, such as a branch, tag, SHA or referral code, is kept.
+    // Code hosts are skipped because there `ref` names a branch, and a branch
+    // can be called `sidebar` as easily as `main`.
+    {
+      host: null,
+      except: /(^|\.)(github\.com|gitlab\.com|bitbucket\.org|codeberg\.org|sourcehut\.org)$/,
+      patterns: [REF_TRACKING],
+    },
   ];
 
   function dropParam(rule, name, value) {
     if (rule.names && rule.names.includes(name)) return true;
     if (rule.prefixes && rule.prefixes.some((p) => name.startsWith(p))) return true;
     if (rule.pairs && rule.pairs.some(([n, v]) => n === name && v === value)) return true;
+    if (rule.patterns && rule.patterns.some((re) => re.test(`${name}=${value}`))) return true;
     return false;
   }
 
@@ -61,7 +80,9 @@
     }
     if (!url.search) return null;
 
-    const rules = RULES.filter((r) => !r.host || r.host.test(url.hostname));
+    const rules = RULES.filter(
+      (r) => (!r.host || r.host.test(url.hostname)) && !(r.except && r.except.test(url.hostname))
+    );
     if (!rules.length) return null;
 
     const kept = [];

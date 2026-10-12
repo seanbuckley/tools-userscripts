@@ -4,6 +4,17 @@ All notable changes to the scripts in this repo are documented here.
 
 ## share-link-cleaner
 
+### 1.1.0
+
+- Strip generic `ref=` referral tags on any site: a referring hostname
+  (`ref=producthunt.com`) or a page placement (`ref=sidebar`, `ref=footer-link`,
+  `ref=newsletter`). Other values such as branches, tags, SHAs and referral
+  codes are kept, and code hosts (GitHub, GitLab, Bitbucket, Codeberg,
+  SourceHut) keep every `ref` except `selfh.st`.
+- Rules gain `patterns` (regexes tested against `name=value`, matching uBO's
+  `removeparam`) and `except` (hosts to skip).
+- README adds the matching uBlock Origin filter and code-host exceptions.
+
 ### 1.0.0
 
 - Initial release: strip Reddit `share_id` and `utm_*`, and `ref=selfh.st` on

@@ -35,7 +35,24 @@ const CASES = [
     'https://github.com/foo/bar?tab=readme'],
   // ref with any other value is content (git refs, branch selectors)
   ['https://github.com/foo/bar/blob/x?ref=main', null],
-  ['https://example.com/?ref=selfh.st.example', null],
+
+  // Generic ref: referring hostnames and page placements
+  ['https://fglibs.com/?ref=sidebar', 'https://fglibs.com/'],
+  ['https://example.com/tool?ref=producthunt.com&id=7', 'https://example.com/tool?id=7'],
+  ['https://example.com/?ref=news.ycombinator.com', 'https://example.com/'],
+  ['https://example.com/?ref=footer-link', 'https://example.com/'],
+  ['https://example.com/?ref=newsletter_2026', 'https://example.com/'],
+  // ref values that are not a placement or hostname stay
+  ['https://example.com/?ref=main', null],
+  ['https://example.com/?ref=v1.2.3', null],
+  ['https://example.com/?ref=a1b2c3d4', null],
+  ['https://example.com/signup?ref=FRIEND42', null],
+  ['https://example.com/?ref=sidebarx', null],
+  ['https://example.com/?referrer=sidebar', null],
+  // Code hosts keep generic ref (a branch can be called sidebar)
+  ['https://github.com/foo/bar/tree/x?ref=sidebar', null],
+  ['https://gitlab.com/foo/bar/-/blob/x?ref=producthunt.com', null],
+  ['https://raw.github.com/foo?ref=footer', null],
   // utm_* off Reddit is left to uBO's lists
   ['https://example.com/?utm_source=share', null],
 
