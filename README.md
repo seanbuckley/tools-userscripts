@@ -6,9 +6,9 @@ Custom user scripts for web annoyances.
 
 | Script | Purpose | Install |
 | --- | --- | --- |
-| Gmail Middle Click → Background Tab | Middle-click a thread in the list, or a link inside an email, to open it in a background tab. | [Install](https://raw.githubusercontent.com/seanbuckley/tools-userscripts/master/gmail-middleclick/gmail-middleclick.user.js) |
-| RedFlagDeals Affiliate Link Cleaner | Rewrite deal links and links in posts to point at the merchant directly, instead of through an affiliate redirector. | [Install](https://raw.githubusercontent.com/seanbuckley/tools-userscripts/master/redflagdeals-affiliate-cleaner/redflagdeals-affiliate-cleaner.user.js) |
-| Share Link Cleaner | Strip share and referral tracking parameters (Reddit `share_id`, `?ref=selfh.st`, generic `?ref=sidebar`-style tags) from the address bar. Pair with the uBlock Origin filters in its [README](share-link-cleaner/README.md). | [Install](https://raw.githubusercontent.com/seanbuckley/tools-userscripts/master/share-link-cleaner/share-link-cleaner.user.js) |
+| Gmail Middle Click → Background Tab | Middle-click a thread in the list, or a link inside an email, to open it in a background tab. | [Install](https://raw.githubusercontent.com/seanbuckley/tools-userscripts/main/gmail-middleclick/gmail-middleclick.user.js) |
+| RedFlagDeals Affiliate Link Cleaner | Rewrite deal links and links in posts to point at the merchant directly, instead of through an affiliate redirector. | [Install](https://raw.githubusercontent.com/seanbuckley/tools-userscripts/main/redflagdeals-affiliate-cleaner/redflagdeals-affiliate-cleaner.user.js) |
+| Share Link Cleaner | Strip share and referral tracking parameters (Reddit `share_id`, `?ref=selfh.st`, generic `?ref=sidebar`-style tags) from the address bar. Pair with the uBlock Origin filters in its [README](share-link-cleaner/README.md). | [Install](https://raw.githubusercontent.com/seanbuckley/tools-userscripts/main/share-link-cleaner/share-link-cleaner.user.js) |
 
 ## Installation
 
@@ -17,7 +17,7 @@ Custom user scripts for web annoyances.
 2. Click a script's **Install** link above. Your userscript manager will recognise
    the `.user.js` file and offer to install it.
 
-Each script's `@updateURL` points at its Raw URL on `master`, so your manager
+Each script's `@updateURL` points at its Raw URL on `main`, so your manager
 picks up new versions on its normal update check.
 
 Tested with Violentmonkey and Tampermonkey. Other managers should work, but

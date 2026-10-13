@@ -13,8 +13,8 @@
 // @noframes
 // @homepageURL  https://github.com/seanbuckley/tools-userscripts
 // @supportURL   https://github.com/seanbuckley/tools-userscripts/issues
-// @updateURL    https://raw.githubusercontent.com/seanbuckley/tools-userscripts/master/redflagdeals-affiliate-cleaner/redflagdeals-affiliate-cleaner.user.js
-// @downloadURL  https://raw.githubusercontent.com/seanbuckley/tools-userscripts/master/redflagdeals-affiliate-cleaner/redflagdeals-affiliate-cleaner.user.js
+// @updateURL    https://raw.githubusercontent.com/seanbuckley/tools-userscripts/main/redflagdeals-affiliate-cleaner/redflagdeals-affiliate-cleaner.user.js
+// @downloadURL  https://raw.githubusercontent.com/seanbuckley/tools-userscripts/main/redflagdeals-affiliate-cleaner/redflagdeals-affiliate-cleaner.user.js
 // ==/UserScript==
 (function () {
   'use strict';

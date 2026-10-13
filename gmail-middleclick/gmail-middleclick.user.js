@@ -13,8 +13,8 @@
 // @noframes
 // @homepageURL  https://github.com/seanbuckley/tools-userscripts
 // @supportURL   https://github.com/seanbuckley/tools-userscripts/issues
-// @updateURL    https://raw.githubusercontent.com/seanbuckley/tools-userscripts/master/gmail-middleclick/gmail-middleclick.user.js
-// @downloadURL  https://raw.githubusercontent.com/seanbuckley/tools-userscripts/master/gmail-middleclick/gmail-middleclick.user.js
+// @updateURL    https://raw.githubusercontent.com/seanbuckley/tools-userscripts/main/gmail-middleclick/gmail-middleclick.user.js
+// @downloadURL  https://raw.githubusercontent.com/seanbuckley/tools-userscripts/main/gmail-middleclick/gmail-middleclick.user.js
 // ==/UserScript==
 (function () {
   'use strict';
