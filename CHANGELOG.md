@@ -4,6 +4,12 @@ All notable changes to the scripts in this repo are documented here.
 
 ## share-link-cleaner
 
+### 1.1.1
+
+- SourceHut repos (`git.sr.ht`, `hg.sr.ht`) now keep generic `ref=` tags like the
+  other code hosts; the exception named `sourcehut.org`, which hosts no repos.
+  The README's uBlock Origin exception changes to `@@||sr.ht^` to match.
+
 ### 1.1.0
 
 - Strip generic `ref=` referral tags on any site: a referring hostname
