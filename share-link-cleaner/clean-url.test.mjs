@@ -53,6 +53,7 @@ const CASES = [
   ['https://github.com/foo/bar/tree/x?ref=sidebar', null],
   ['https://gitlab.com/foo/bar/-/blob/x?ref=producthunt.com', null],
   ['https://raw.github.com/foo?ref=footer', null],
+  ['https://git.sr.ht/~foo/bar/tree/x?ref=sidebar', null],
   // utm_* off Reddit is left to uBO's lists
   ['https://example.com/?utm_source=share', null],
 

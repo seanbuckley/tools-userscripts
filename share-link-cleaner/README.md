@@ -36,7 +36,7 @@ $removeparam=/^ref=(([a-z0-9-]+\.)+[a-z][a-z]+|(sidebar|nav|navbar|menu|header|f
 @@||gitlab.com^$removeparam=/^ref=(([a-z0-9-]+\.)+[a-z][a-z]+|(sidebar|nav|navbar|menu|header|footer|home|homepage|banner|newsletter|email|rss|feed|share|social|twitter|facebook|linkedin|reddit|hn|hackernews|producthunt|blog|related|widget|cta)([-_][a-z0-9]+)*)$/
 @@||bitbucket.org^$removeparam=/^ref=(([a-z0-9-]+\.)+[a-z][a-z]+|(sidebar|nav|navbar|menu|header|footer|home|homepage|banner|newsletter|email|rss|feed|share|social|twitter|facebook|linkedin|reddit|hn|hackernews|producthunt|blog|related|widget|cta)([-_][a-z0-9]+)*)$/
 @@||codeberg.org^$removeparam=/^ref=(([a-z0-9-]+\.)+[a-z][a-z]+|(sidebar|nav|navbar|menu|header|footer|home|homepage|banner|newsletter|email|rss|feed|share|social|twitter|facebook|linkedin|reddit|hn|hackernews|producthunt|blog|related|widget|cta)([-_][a-z0-9]+)*)$/
-@@||sourcehut.org^$removeparam=/^ref=(([a-z0-9-]+\.)+[a-z][a-z]+|(sidebar|nav|navbar|menu|header|footer|home|homepage|banner|newsletter|email|rss|feed|share|social|twitter|facebook|linkedin|reddit|hn|hackernews|producthunt|blog|related|widget|cta)([-_][a-z0-9]+)*)$/
+@@||sr.ht^$removeparam=/^ref=(([a-z0-9-]+\.)+[a-z][a-z]+|(sidebar|nav|navbar|menu|header|footer|home|homepage|banner|newsletter|email|rss|feed|share|social|twitter|facebook|linkedin|reddit|hn|hackernews|producthunt|blog|related|widget|cta)([-_][a-z0-9]+)*)$/
 ```
 
 A `removeparam` regex is tested against `name=value`, which is how these lines
