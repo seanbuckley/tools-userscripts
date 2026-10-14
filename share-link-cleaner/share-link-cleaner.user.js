@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         Share Link Cleaner
 // @namespace    https://github.com/seanbuckley/tools-userscripts
-// @version      1.1.1
-// @description  Strip share and referral tracking parameters (Reddit share_id, ?ref=selfh.st, ?ref=sidebar) from the address bar so a copied or saved URL comes out clean
+// @version      1.2.0
+// @description  Strip share and referral tracking parameters (Reddit share_id, ?ref=selfh.st, ?ref=sidebar, Kit ck_subscriber_id) from the address bar so a copied or saved URL comes out clean
 // @author       Sean Buckley
 // @license      MIT
 // @match        *://*/*
@@ -59,6 +59,10 @@
       except: /(^|\.)(github\.com|gitlab\.com|bitbucket\.org|codeberg\.org|sr\.ht)$/,
       patterns: [REF_TRACKING],
     },
+    // Kit (ConvertKit) newsletters append ck_subscriber_id to every link they
+    // send, so the landing site can tie the visit to a subscriber. The name is
+    // Kit's own and never page content.
+    { host: null, names: ['ck_subscriber_id'] },
   ];
 
   function dropParam(rule, name, value) {

@@ -8,6 +8,7 @@ bookmark comes out clean.
 | Reddit (any subdomain) | `share_id`, `utm_*` | `…/using_the_same_hostnames_at_home_and_over/?share_id=NNO2d7e32tY1wsGdRyTzt` |
 | Any site | `ref=selfh.st` | `blog.cloudflare.com/cloudflare-certificate-authority/?ref=selfh.st` |
 | Any site except code hosts | `ref=<hostname>` or `ref=<placement>` (`sidebar`, `footer`, `newsletter`, …) | `fglibs.com/?ref=sidebar`, `…/?ref=producthunt.com` |
+| Any site | `ck_subscriber_id` (Kit / ConvertKit newsletters) | `anoma.ly/notes/opencode-2-0/?ck_subscriber_id=478660410` |
 
 Other `ref` values (`main`, `v1.2.3`, a SHA, a referral code) are left alone, and
 GitHub, GitLab, Bitbucket, Codeberg and SourceHut keep every `ref` except
@@ -37,6 +38,7 @@ $removeparam=/^ref=(([a-z0-9-]+\.)+[a-z][a-z]+|(sidebar|nav|navbar|menu|header|f
 @@||bitbucket.org^$removeparam=/^ref=(([a-z0-9-]+\.)+[a-z][a-z]+|(sidebar|nav|navbar|menu|header|footer|home|homepage|banner|newsletter|email|rss|feed|share|social|twitter|facebook|linkedin|reddit|hn|hackernews|producthunt|blog|related|widget|cta)([-_][a-z0-9]+)*)$/
 @@||codeberg.org^$removeparam=/^ref=(([a-z0-9-]+\.)+[a-z][a-z]+|(sidebar|nav|navbar|menu|header|footer|home|homepage|banner|newsletter|email|rss|feed|share|social|twitter|facebook|linkedin|reddit|hn|hackernews|producthunt|blog|related|widget|cta)([-_][a-z0-9]+)*)$/
 @@||sr.ht^$removeparam=/^ref=(([a-z0-9-]+\.)+[a-z][a-z]+|(sidebar|nav|navbar|menu|header|footer|home|homepage|banner|newsletter|email|rss|feed|share|social|twitter|facebook|linkedin|reddit|hn|hackernews|producthunt|blog|related|widget|cta)([-_][a-z0-9]+)*)$/
+$removeparam=ck_subscriber_id
 ```
 
 A `removeparam` regex is tested against `name=value`, which is how these lines
@@ -50,6 +52,10 @@ uBO only cancels a `removeparam` whose value matches; they leave the
 - The `selfh.st/r/…?m=…` click redirect. It is the newsletter's click tracking
   and is recorded the moment the email link is opened, before uBO sees the
   destination.
+- Kit's `click.convertkit-mail.com/…` redirect, for the same reason: the click
+  is logged before the browser reaches the article. Stripping
+  `ck_subscriber_id` only stops the landing site learning which subscriber
+  arrived; a Kit-powered site may then show its signup form again.
 - The share itself. Reddit records it when the app creates the link on the
   phone; stripping only stops the desktop visit being tied back to it.
 

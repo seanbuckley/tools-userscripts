@@ -4,6 +4,12 @@ All notable changes to the scripts in this repo are documented here.
 
 ## share-link-cleaner
 
+### 1.2.0
+
+- Strip Kit (ConvertKit) `ck_subscriber_id` on any site. Kit newsletters add it
+  to every outbound link so the landing site can identify the subscriber.
+- README adds the matching `$removeparam=ck_subscriber_id` uBlock Origin filter.
+
 ### 1.1.1
 
 - SourceHut repos (`git.sr.ht`, `hg.sr.ht`) now keep generic `ref=` tags like the
