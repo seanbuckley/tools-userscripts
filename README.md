@@ -8,7 +8,7 @@ Custom user scripts for web annoyances.
 | --- | --- | --- |
 | Gmail Middle Click → Background Tab | Middle-click a thread in the list, or a link inside an email, to open it in a background tab. | [Install](https://raw.githubusercontent.com/seanbuckley/tools-userscripts/main/gmail-middleclick/gmail-middleclick.user.js) |
 | RedFlagDeals Affiliate Link Cleaner | Rewrite deal links and links in posts to point at the merchant directly, instead of through an affiliate redirector. | [Install](https://raw.githubusercontent.com/seanbuckley/tools-userscripts/main/redflagdeals-affiliate-cleaner/redflagdeals-affiliate-cleaner.user.js) |
-| Share Link Cleaner | Strip share and referral tracking parameters (Reddit `share_id`, `?ref=selfh.st`, generic `?ref=sidebar`-style tags) from the address bar. Pair with the uBlock Origin filters in its [README](share-link-cleaner/README.md). | [Install](https://raw.githubusercontent.com/seanbuckley/tools-userscripts/main/share-link-cleaner/share-link-cleaner.user.js) |
+| Share Link Cleaner | Strip share and referral tracking parameters (Reddit `share_id`, `?ref=selfh.st`, generic `?ref=sidebar`-style tags, Kit `ck_subscriber_id`) from the address bar. Pair with the uBlock Origin filters in its [README](share-link-cleaner/README.md). | [Install](https://raw.githubusercontent.com/seanbuckley/tools-userscripts/main/share-link-cleaner/share-link-cleaner.user.js) |
 
 ## Installation
 

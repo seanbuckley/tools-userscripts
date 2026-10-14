@@ -57,6 +57,13 @@ const CASES = [
   // utm_* off Reddit is left to uBO's lists
   ['https://example.com/?utm_source=share', null],
 
+  // Kit (ConvertKit) subscriber id, on any site
+  ['https://anoma.ly/notes/opencode-2-0/?ck_subscriber_id=478660410',
+    'https://anoma.ly/notes/opencode-2-0/'],
+  ['https://example.com/post?id=7&ck_subscriber_id=1#top', 'https://example.com/post?id=7#top'],
+  ['https://github.com/foo/bar?ck_subscriber_id=1', 'https://github.com/foo/bar'],
+  ['https://example.com/?ck_subscriber=1', null],
+
   // Encoding of surviving parameters is preserved byte for byte
   ['https://example.com/s?q=a%2Bb+c&ref=selfh.st', 'https://example.com/s?q=a%2Bb+c'],
   // Malformed escapes are kept rather than crashing
