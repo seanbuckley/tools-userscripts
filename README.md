@@ -43,6 +43,15 @@ extend it when adding an affiliate network.
 CI runs `node --check` against every `*.user.js` file on push and pull request.
 It does not run the `*.test.mjs` files.
 
+## AutoHotkey
+
+[`autohotkey/`](autohotkey) holds Windows AutoHotkey v2 scripts. They aren't
+userscripts and CI doesn't check them.
+
+| Script | Purpose |
+| --- | --- |
+| [filenamPrefixDate.ahk](autohotkey/filenamPrefixDate.ahk) | Ctrl+Alt+D in File Explorer prefixes the selected files and folders with today's date (`yyyy-MM-dd_`). |
+
 ## Licence
 
 [MIT](LICENSE)

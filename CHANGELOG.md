@@ -2,6 +2,14 @@
 
 All notable changes to the scripts in this repo are documented here.
 
+## autohotkey/filenamPrefixDate.ahk
+
+### 1.0.0
+
+- Rewritten for AutoHotkey v2; the v1 `ControlGet, …, Hwnd` call failed to load
+  under v2. Ctrl+Alt+D in Explorer prefixes the selected files and folders with
+  today's date (`yyyy-MM-dd_`), acting only on the active Windows 11 tab.
+
 ## share-link-cleaner
 
 ### 1.2.0
